@@ -1,5 +1,5 @@
 # docker build -t worden/php ./php
-# docker run -d --name=phpW -p 9000:9000 --link mysqlW:mysqlW --link mongoW:mongoW -v ~/Code/worden:/worden -v ~/Code/sipai:/sipai -it worden/php
+# docker run -d --name=phpW -p 9000:9000 --link mysqlW:mysqlW --link redisW:redisW --link mongoW:mongoW -v ~/Code/worden:/worden -v ~/Code/sipai:/sipai -it worden/php
 
 FROM php:7.0-fpm
 
@@ -24,6 +24,9 @@ RUN apt-get update && apt-get install -y \
         mbstring \
         pdo_mysql \
         zip
+
+#===Ping命令===
+RUN apt-get install -yqq inetutils-ping
 
 #===mongo扩展===
 RUN pecl install mongodb \
