@@ -1,37 +1,47 @@
 
-mysql_w:
+mysqlW:
     #build: ./mysql
     image: worden/mysql
     ports:
       - "3306:3306"
     volumes:
-      - ~/Code/worden/docker_test/mysql/data:/var/lib/mysql
+      - ~/Code/worden/docker_data/mysql/data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: 123456
 
-redis_w:
+mongoW:
+    #build: ./mysql
+    image: worden/mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/Code/worden/docker_data/mongo:/data/db
+
+redisW:
     #build: ./redis
     image: worden/redis
     ports:
       - "6379:6379"
 
-php_w:
+phpW:
     #build: ./php
     image: worden/php
     ports:
       - "9000:9000"
     links:
-      - mysql_w
-      - redis_w
+      - mysqlW
+      - mongoW
+      - redisW
     volumes:
       - ~/Code/worden:/worden
+      - ~/Code/sipai:/sipai
 
-nginx_w:
+nginxW:
     #build: ./nginx
     image: worden/nginx
     ports:
       - "80:80"
     links:
-      - php_w
+      - phpW
     volumes_from:
-      - php_w
+      - phpW
