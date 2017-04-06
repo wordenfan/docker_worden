@@ -1,3 +1,8 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
 
 mysqlW:
     #build: ./mysql
@@ -23,6 +28,13 @@ redisW:
     ports:
       - "6379:6379"
 
+elasticsearchW:
+  #build: ./elasticsearch
+  image: worden/elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+
 phpW:
     #build: ./php
     image: worden/php
@@ -32,6 +44,7 @@ phpW:
       - mysqlW
       - mongoW
       - redisW
+      - elasticsearchW
     volumes:
       - ~/Code/worden:/worden
       - ~/Code/sipai:/sipai
@@ -45,3 +58,29 @@ nginxW:
       - phpW
     volumes_from:
       - phpW
+    volumes:
+      - ~/Code/docker_worden/src/nginx/logs:/var/log/nginx
+
+# golangW:
+#     #build: ./golang
+#     image: worden/golang
+#     links:
+#       - mysqlW
+#       - redisW
+#     volumes:
+#       - ~/Code/worden:/worden
+
+# pythonW:
+#     #build: ./python
+#     image: worden/python
+#     command:
+#       python ./python/app.py
+#     ports:
+#       - "5000:5000"
+#     links:
+#       - mysqlW
+#       - mongoW
+#       - redisW
+#       - elasticsearchW
+#     volumes:
+#       - ~/Code/worden/python:/worden/python

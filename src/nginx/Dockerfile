@@ -9,6 +9,7 @@ FROM nginx:1.9
 ADD  ./conf/worden.conf  /etc/nginx/conf.d/worden.conf
 ADD  ./conf/onethink.conf  /etc/nginx/conf.d/onethink.conf
 ADD  ./conf/4s_general.conf  /etc/nginx/conf.d/4s_general.conf
+ADD  ./conf/4s_my.conf  /etc/nginx/conf.d/4s_my.conf
 
 # ADD  ./sites-available    /etc/nginx/sites-available
 ADD  ./logs                /var/log/nginx
