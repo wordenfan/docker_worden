@@ -3,7 +3,7 @@
 
 # copy from https://github.com/laradock/laradock/blob/master/mongo/Dockerfile
 
-FROM mongo:latest
+FROM mongo:4.1
 
 MAINTAINER Mahmoud Zalt <mahmoud@zalt.me>
 

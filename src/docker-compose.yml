@@ -4,83 +4,80 @@
 # expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
 # 参考 http://debugo.com/docker-compose/
 
-mysqlW:
-    #build: ./mysql
-    image: worden/mysql
-    ports:
-      - "3306:3306"
-    volumes:
-      - ~/Code/worden/docker_data/mysql/data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: 123456
+version: '2'
+services:
+  mysqlW:
+      #build: ./mysql
+      image: worden/mysql
+      container_name: "lx_mysql"
+      ports:
+        - "3306:3306"
+      volumes:
+        - ~/Code/dockerEnv/src/mysql/data:/var/lib/mysql
+      environment:
+        MYSQL_ROOT_PASSWORD: 123456
+        MYSQL_DATABASE: lanxin_local_test
+        MYSQL_USER: root
+        MYSQL_PASSWORD: root
 
-mongoW:
-    #build: ./mysql
-    image: worden/mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - ~/Code/worden/docker_data/mongo:/data/db
+  redisW:
+      #build: ./redis
+      image: worden/redis
+      container_name: lx_redis
+      ports:
+        - "6379:6379"
 
-redisW:
-    #build: ./redis
-    image: worden/redis
-    ports:
-      - "6379:6379"
+  elasticsearchW:
+      #build: ./elasticsearch
+      image: worden/elasticsearch
+      container_name: lx_es
+      volumes:
+         - ~/Code/dockerEnv/src/es_data:/usr/share/elasticsearch/data
+      #   - ~/Code/dockerEnv/src/config/es1.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      environment:
+         - bootstrap.memory_lock=true
+         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+         - discovery.type=single-node
+      ports:
+         - "9200:9200"
+         - "9300:9300"
 
-elasticsearchW:
-  #build: ./elasticsearch
-  image: worden/elasticsearch
-  ports:
-    - "9200:9200"
-    - "9300:9300"
+  phpW:
+      #build: ./php
+      image: worden/php
+      container_name: lx_php
+      ports:
+        - "9000:9000"
+      links:
+        - "mysqlW"
+        - "redisW"
+        - "elasticsearchW"
+      volumes:
+        - ~/Code/worden:/worden
+        - ~/Code/lx:/lx
 
-phpW:
-    #build: ./php
-    image: worden/php
-    ports:
-      - "9000:9000"
-    links:
-      - mysqlW
-      - mongoW
-      - redisW
-      - elasticsearchW
-    volumes:
-      - ~/Code/worden:/worden
-      - ~/Code/sipai:/sipai
+  nginxW:
+      #build: ./nginx
+      image: worden/nginx
+      container_name: lx_nginx
+      ports:
+        - "80:80"
+      links:
+        - "phpW"
+      volumes_from:
+        - "phpW"
+      volumes:
+        - ~/Code/dockerEnv/src/nginx/logs:/var/log/nginx
 
-nginxW:
-    #build: ./nginx
-    image: worden/nginx
-    ports:
-      - "80:80"
-    links:
-      - phpW
-    volumes_from:
-      - phpW
-    volumes:
-      - ~/Code/docker_worden/src/nginx/logs:/var/log/nginx
 
-# golangW:
-#     #build: ./golang
-#     image: worden/golang
-#     links:
-#       - mysqlW
-#       - redisW
-#     volumes:
-#       - ~/Code/worden:/worden
-
-# pythonW:
-#     #build: ./python
-#     image: worden/python
-#     command:
-#       python ./python/app.py
-#     ports:
-#       - "5000:5000"
-#     links:
-#       - mysqlW
-#       - mongoW
-#       - redisW
-#       - elasticsearchW
-#     volumes:
-#       - ~/Code/worden/python:/worden/python
+  golangW:
+         #build: ./golang
+         image: worden/golang
+         container_name: lx_golang
+         links:
+           - "mysqlW"
+           - "redisW"
+         volumes:
+           - ~/Code/worden:/worden
+         stdin_open: true
+         tty: true
