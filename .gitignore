@@ -1,0 +1,9 @@
+.DS_Store
+*.project
+*.log
+.*.swp
+*/build/*
+.idea
+.idea/*
+src/mysql/data/*
+src/es_data/*
