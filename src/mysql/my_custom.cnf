@@ -1,7 +1,7 @@
-# docker build -t worden/mysql ./mysql
-# docker run -d --name=mysqlW -p 3306:3306 -v ~/Code/worden/docker_test/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 -it worden/mysql
+[client]
+default-character-set=utf8
 
-
-FROM mysql:5.6
-
-ADD ./mycustom.cnf /etc/apt/sources.list mycustom.cnf:/etc/mysql/conf.d/custom.cnf
+[mysqld]
+character-set-server=utf8
+collation-server=utf8_general_ci
+skip-character-set-client-handshake
