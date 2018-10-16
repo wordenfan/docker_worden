@@ -5,4 +5,10 @@ FROM golang:1.11.0
 
 RUN apt-get update && apt-get install -y vim
 
+# VOLUME ["/usr/local"]
+
+ENV PATH $PATH:$GOPATH/bin
+
+ENV GOPATH /worden/golang/src
+
 WORKDIR /worden/golang/src
