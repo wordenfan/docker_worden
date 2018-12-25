@@ -82,3 +82,16 @@ services:
         - ~/Code/worden:/worden
       stdin_open: true
       tty: true
+
+
+  pythonW:
+      #build: ./python
+      image: worden/python
+      container_name: lx_python
+      links:
+        - "mysqlW"
+        - "redisW"
+      volumes:
+        - ~/Code/worden:/worden
+      stdin_open: true
+      tty: true

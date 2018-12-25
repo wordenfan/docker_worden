@@ -7,7 +7,7 @@
 FROM nginx:1.9
 
 ADD  ./conf/demo_a.conf  /etc/nginx/conf.d/demo_a.conf
-ADD  ./conf/lx.conf  /etc/nginx/conf.d/lx.conf
+ADD  ./conf/gaia.conf  /etc/nginx/conf.d/gaia.conf
 
 # ADD  ./sites-available    /etc/nginx/sites-available
 ADD  ./logs                /var/log/nginx
