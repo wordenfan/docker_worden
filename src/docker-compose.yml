@@ -20,6 +20,9 @@ services:
         MYSQL_DATABASE: lanxin_local_test
         MYSQL_USER: root
         MYSQL_PASSWORD: root
+      networks:
+        mynetwork:
+          ipv4_address: 172.20.0.2
 
   redisW:
       #build: ./redis
@@ -27,6 +30,9 @@ services:
       container_name: lx_redis
       ports:
         - "6379:6379"
+      networks:
+        mynetwork:
+          ipv4_address: 172.20.0.3
 
   elasticsearchW:
       #build: ./elasticsearch
@@ -42,6 +48,9 @@ services:
       ports:
          - "9200:9200"
          - "9300:9300"
+      networks:
+        mynetwork:
+          ipv4_address: 172.20.0.4
 
   phpW:
       #build: ./php
@@ -71,6 +80,7 @@ services:
         - ~/Code/dockerEnv/src/nginx/logs:/var/log/nginx
 
 
+
   golangW:
       #build: ./golang
       image: worden/golang
@@ -95,3 +105,11 @@ services:
         - ~/Code/worden:/worden
       stdin_open: true
       tty: true
+
+#networks 要与上分的service目录同级别
+networks:
+ mynetwork:
+    ipam:
+       config:
+       - subnet: 172.20.0.0/16
+         gateway: 172.20.0.1
