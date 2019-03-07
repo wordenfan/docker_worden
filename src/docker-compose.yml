@@ -6,110 +6,121 @@
 
 version: '2'
 services:
-  mysqlW:
-      #build: ./mysql
-      image: worden/mysql
-      container_name: "lx_mysql"
-      ports:
-        - "3306:3306"
-      volumes:
-        - ~/Code/dockerEnv/src/mysql/data:/var/lib/mysql
-      restart: always
-      environment:
-        MYSQL_ROOT_PASSWORD: 123456
-        MYSQL_DATABASE: lanxin_local_test
-        MYSQL_USER: root
-        MYSQL_PASSWORD: root
-      networks:
-        mynetwork:
-          ipv4_address: 172.20.0.2
+    mysqlW:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/src/mysql/data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: lanxin_local_test
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
 
-  redisW:
-      #build: ./redis
-      image: worden/redis
-      container_name: lx_redis
-      ports:
-        - "6379:6379"
-      networks:
-        mynetwork:
-          ipv4_address: 172.20.0.3
+    redisW:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis
+        ports:
+            - "6379:6379"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.3
 
-  elasticsearchW:
-      #build: ./elasticsearch
-      image: worden/elasticsearch
-      container_name: lx_es
-      volumes:
-         - ~/Code/dockerEnv/src/es_data:/usr/share/elasticsearch/data
-      #   - ~/Code/dockerEnv/src/config/es1.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      environment:
-         - bootstrap.memory_lock=true
-         - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-         - discovery.type=single-node
-      ports:
-         - "9200:9200"
-         - "9300:9300"
-      networks:
-        mynetwork:
-          ipv4_address: 172.20.0.4
+    elasticsearchW:
+        #build: ./elasticsearch
+        image: worden/elasticsearch
+        container_name: lx_es
+        volumes:
+            - ~/Code/dockerEnv/src/es_data:/usr/share/elasticsearch/data
+            # - ~/Code/dockerEnv/src/config/es1.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        environment:
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - discovery.type=single-node
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.4
 
-  phpW:
-      #build: ./php
-      image: worden/php
-      container_name: lx_php
-      ports:
-        - "9000:9000"
-      links:
-        - "mysqlW"
-        - "redisW"
-        - "elasticsearchW"
-      volumes:
-        - ~/Code/worden:/worden
-        - ~/Code/lx:/lx
+    phpW:
+        #build: ./php
+        image: worden/php
+        container_name: lx_php
+        ports:
+            - "9000:9000"
+        links:
+            - "mysqlW"
+            - "redisW"
+            - "elasticsearchW"
+        volumes:
+            - ~/Code/worden:/worden
+            - ~/Code/lx:/lx
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.5
 
-  nginxW:
-      #build: ./nginx
-      image: worden/nginx
-      container_name: lx_nginx
-      ports:
-        - "80:80"
-      links:
-        - "phpW"
-      volumes_from:
-        - "phpW"
-      volumes:
-        - ~/Code/dockerEnv/src/nginx/logs:/var/log/nginx
-
-
-
-  golangW:
-      #build: ./golang
-      image: worden/golang
-      container_name: lx_golang
-      links:
-        - "mysqlW"
-        - "redisW"
-      volumes:
-        - ~/Code/worden:/worden
-      stdin_open: true
-      tty: true
+    nginxW:
+        #build: ./nginx
+        image: worden/nginx
+        container_name: lx_nginx
+        ports:
+            - "80:80"
+        links:
+            - "phpW"
+        volumes_from:
+            - "phpW"
+        volumes:
+            - ~/Code/dockerEnv/src/nginx/logs:/var/log/nginx
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.6
 
 
-  pythonW:
-      #build: ./python
-      image: worden/python
-      container_name: lx_python
-      links:
-        - "mysqlW"
-        - "redisW"
-      volumes:
-        - ~/Code/worden:/worden
-      stdin_open: true
-      tty: true
+    golangW:
+        #build: ./golang
+        image: worden/golang
+        container_name: lx_golang
+        links:
+            - "mysqlW"
+            - "redisW"
+        volumes:
+            - ~/Code/worden:/worden
+        stdin_open: true
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.7
 
-#networks 要与上分的service目录同级别
+
+    pythonW:
+        #build: ./python
+        image: worden/python
+        container_name: lx_python
+        links:
+            - "mysqlW"
+            - "redisW"
+        volumes:
+            - ~/Code/worden:/worden
+        stdin_open: true
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.8
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
 networks:
- mynetwork:
-    ipam:
-       config:
-       - subnet: 172.20.0.0/16
-         gateway: 172.20.0.1
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1
