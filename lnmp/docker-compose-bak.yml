@@ -13,12 +13,12 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ~/Code/dockerEnv/src/mysql/data:/var/lib/mysql
+            - ~/Code/dockerEnv/lnmp/mysql/data:/var/lib/mysql
             - ~/Code/worden:/worden
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: 123456
-            MYSQL_DATABASE: lanxin_local_test
+            MYSQL_DATABASE: worden_test_a
             MYSQL_USER: root
             MYSQL_PASSWORD: root
         networks:
@@ -40,7 +40,7 @@ services:
         image: worden/elasticsearch
         container_name: lx_es
         volumes:
-            - ~/Code/dockerEnv/src/es_data:/usr/share/elasticsearch/data
+            - ~/Code/dockerEnv/lnmp/es_data:/usr/share/elasticsearch/data
             # - ~/Code/dockerEnv/src/config/es1.yml:/usr/share/elasticsearch/config/elasticsearch.yml
         environment:
             - bootstrap.memory_lock=true
@@ -100,7 +100,7 @@ services:
         volumes_from:
             - "phpW"
         volumes:
-            - ~/Code/dockerEnv/src/nginx/logs:/var/log/nginx
+            - ~/Code/dockerEnv/lnmp/nginx/logs:/var/log/nginx
         networks:
             mynetwork:
                 ipv4_address: 172.20.0.6
@@ -115,6 +115,7 @@ services:
             - "redisW"
         volumes:
             - ~/Code/worden:/worden
+            - ~/Code/golang:/golang
         stdin_open: true
         tty: true
         networks:

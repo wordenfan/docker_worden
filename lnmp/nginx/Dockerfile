@@ -7,14 +7,12 @@
 FROM nginx:1.9
 
 # ADD  ./conf  /etc/nginx/conf.d
-ADD  ./conf/yisa_mis.conf  /etc/nginx/conf.d/yisa_mis.conf
+ADD  ./conf/se_a.conf  /etc/nginx/conf.d/se_a.conf
 ADD  ./conf/ngrok.conf  /etc/nginx/conf.d/ngrok.conf
 ADD  ./conf/test.conf  /etc/nginx/conf.d/test.conf
 
 # ADD  ./sites-available    /etc/nginx/sites-available
 ADD  ./logs                /var/log/nginx
-
-
 
 RUN   cp /etc/apt/sources.list /etc/apt/sources.list.bak
 
@@ -34,6 +32,22 @@ RUN   echo "deb http://extras.ubuntu.com/ubuntu/ xenial main">>sources.list
 
 RUN apt-get update
 RUN apt-get -y install vim
+RUN apt-get -y install gcc
+RUN apt-get -y install make
+RUN apt-get -y install geoip-database
+RUN apt-get -y install libgeoip-dev
+RUN apt-get -y install libncursesw5-dev
+RUN apt-get -y install libtokyocabinet-dev
+
+#===goaccess===
+COPY ./software/goaccess-1.4.6.tar.gz /worden_software/goaccess-1.4.6.tar.gz
+WORKDIR /worden_software
+RUN tar -xf ./goaccess-1.4.6.tar.gz \
+&& cd goaccess-1.4.6 \
+&& ./configure --enable-utf8 --enable-geoip=legacy --with-getline --disable-dependency-tracking \
+&& make \
+&& make install 
+
 
 WORKDIR /etc/nginx/conf.d
 

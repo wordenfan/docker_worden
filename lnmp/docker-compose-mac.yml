@@ -1,0 +1,123 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
+
+version: '2'
+services:
+    mysqlW:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/lnmp/mysql/data:/var/lib/mysql
+            - ~/Code/worden:/worden
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: worden_test_a
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
+
+    redisW_master:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis_master
+        ports:
+            - "6379:6379"
+        volumes:
+            - ~/Code/dockerEnv/lnmp/redis/redis_master.conf:/usr/local/etc/redis/redis_master.conf
+            - ~/Code/dockerEnv/lnmp/redis/data/redis_master:/data
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.10
+    redisW_slave1:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis_slave1
+        ports:
+            - "6380:6380"
+        volumes:
+            - ~/Code/dockerEnv/lnmp/redis/redis_slave1.conf:/usr/local/etc/redis/redis_slave1.conf
+            - ~/Code/dockerEnv/lnmp/redis/data/redis_slave1.conf:/data
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.11
+    redisW_slave2:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis_slave2
+        ports:
+            - "6381:6381"
+        volumes:
+            - ~/Code/dockerEnv/lnmp/redis/redis_slave2.conf:/usr/local/etc/redis/redis_slave2.conf
+            - ~/Code/dockerEnv/lnmp/redis/data/redis_slave2.conf:/data
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.12
+
+
+    phpW:
+        #build: ./php
+        image: worden/php
+        container_name: lx_php
+        ports:
+            - "9000:9000"
+        links:
+            - "mysqlW"
+            - "redisW_master"
+            - "redisW_slave1"
+            - "redisW_slave2"
+        volumes:
+            - ~/Code/worden:/worden
+            - ~/Code/lx:/lx
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.5
+
+    nginxW:
+        #build: ./nginx
+        image: worden/nginx
+        container_name: lx_nginx
+        ports:
+            - "80:80"
+            - "8080:8080"
+            - "8083:8083"
+            - "7890:7890"
+        links:
+            - "phpW"
+        volumes_from:
+            - "phpW"
+        volumes:
+            - ~/Code/dockerEnv/lnmp/nginx/logs:/var/log/nginx
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.6
+
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1

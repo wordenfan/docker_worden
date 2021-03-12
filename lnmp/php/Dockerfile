@@ -23,50 +23,67 @@ RUN apt-get update \
     # && docker-php-ext-install -j$(nproc) iconv mcrypt \
     # 如果安装的扩展需要自定义配置时
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd 
 
 
-RUN docker-php-ext-install mysqli
-RUN docker-php-ext-install pdo_mysql
-
-
+# RUN composer selfupdate
+RUN apt-get install zip unzip
 #===Ping命令===
 RUN apt-get install -yqq inetutils-ping
 
-RUN pecl install mongodb-1.5.3 \
-    && docker-php-ext-enable mongodb
+RUN docker-php-ext-install mysqli
+RUN docker-php-ext-install pdo_mysql
+RUN docker-php-ext-install zip
 
-RUN pecl install redis-4.0.1 \
-    && docker-php-ext-enable redis
-
-RUN pecl install swoole-4.2.0 \
-    && docker-php-ext-enable swoole
-
-RUN pecl install zip-1.15.4 \
-    && docker-php-ext-enable zip
-
-RUN pecl install grpc-1.33.1 \
-    && docker-php-ext-enable grpc
-
-RUN pecl install protobuf-3.14.0 \
-    && docker-php-ext-enable protobuf
 
 #===redis扩展===
 # COPY而不是ADD，这是由于ADD指令会 自动解压tar文件
-# COPY ./ext_software/php_redis-2.2.4.tar.gz /worden_software/php_redis-2.2.4.tar.gz
+COPY ./ext_software/phpredis-5.3.3.tar.gz /worden_software/phpredis-5.3.3.tar.gz
+WORKDIR /worden_software
+RUN tar -xf ./phpredis-5.3.3.tar.gz \
+&& (  \
+ cd phpredis-5.3.3 \
+ && phpize \
+ && ./configure \
+ && make \
+ && make install \
+) \
+&& docker-php-ext-enable redis
+
+#===swoole扩展===
+COPY ./ext_software/swoole-src-1.9.2-stable.tar.gz /worden_software/swoole-src-1.9.2-stable.tar.gz
+WORKDIR /worden_software
+RUN tar -xf ./swoole-src-1.9.2-stable.tar.gz \
+&& (  \
+ cd swoole-src-1.9.2-stable \
+ && phpize \
+ && ./configure \
+ && make \
+ && make install \
+) \
+&& docker-php-ext-enable swoole
+
+#===mongodb扩展===
+COPY ./ext_software/mongodb-1.5.3.tgz /worden_software/mongodb-1.5.3.tgz
+WORKDIR /worden_software
+RUN tar -xf ./mongodb-1.5.3.tgz \
+&& (  \
+ cd mongodb-1.5.3 \
+ && phpize \
+ && ./configure \
+ && make \
+ && make install \
+) \
+&& docker-php-ext-enable mongodb
+
+#===composer===
 ADD ./ext_software/composer.phar /usr/local/bin/composer
 RUN chmod 755 /usr/local/bin/composer
 RUN composer self-update
 RUN composer config -g --unset repos.packagist
 RUN composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
-
-# RUN composer selfupdate
-RUN apt-get install zip unzip
-
-
 ENV TIME_ZONE Asiz/Shanghai
 
 WORKDIR /worden
-
 VOLUME ["/worden"]
