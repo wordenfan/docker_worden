@@ -1,0 +1,207 @@
+2021/03/13 09:51:50 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:51:51 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:51:52 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:51:53 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:51:54 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:51:57 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:52:00 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:52:07 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:52:21 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:52:47 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:53:39 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:54:39 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:55:40 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:43 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:44 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:45 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:46 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:47 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:49 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:56:53 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:57:00 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:14 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:15 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:16 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:17 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:19 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:21 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:58:25 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:00 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:01 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:02 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:04 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:05 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:07 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:15 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:16 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:17 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:18 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:19 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:21 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:25 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 09:59:32 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 10:06:36 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 10:06:39 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 10:06:41 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/13 10:06:42 [emerg] 1#1: directive "access_log" is not terminated by ";" in /etc/nginx/conf.d/se_a.conf:11
+2021/03/18 14:19:21 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:21 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:23 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:23 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:24 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:24 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:25 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:26 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:27 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:27 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:29 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:30 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:33 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:33 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:40 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:41 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:53 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:19:54 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:19 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:20 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:22 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:23 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:24 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:25 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:26 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:29 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:20:33 [emerg] 1#1: host not found in upstream "lx_php" in /etc/nginx/conf.d/ngrok.conf:15
+2021/03/18 14:22:55 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:22:56 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:22:57 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:23:32 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:23:32 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:23:33 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:37:48 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:37:49 [warn] 1#1: conflicting server name "test.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 14:37:50 [warn] 1#1: conflicting server name "se_a.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 15:09:54 [warn] 1#1: conflicting server name "se_a.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 15:09:54 [warn] 1#1: conflicting server name "se_a.worden.com" on 0.0.0.0:80, ignored
+2021/03/18 15:09:55 [warn] 1#1: conflicting server name "se_a.worden.com" on 0.0.0.0:80, ignored
+2021/03/19 12:03:50 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:03:51 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:03:52 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:03:54 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:03:55 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:03:57 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:04:01 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:04:08 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:04:21 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:04:48 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/19 12:05:39 [emerg] 1#1: invalid log level "main" in /etc/nginx/conf.d/load_balance.conf:13
+2021/03/24 12:12:10 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:11 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:13 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:14 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:15 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:17 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:21 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:28 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:12:41 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:13:08 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:14:00 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:15:01 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:16:01 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:17:02 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:18:02 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:19:03 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:20:04 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:21:04 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:22:05 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:23:05 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:24:06 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:25:06 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:26:07 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:27:07 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:28:08 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:29:08 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:30:08 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:31:09 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:32:09 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:33:10 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:34:10 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:35:11 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:36:11 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:37:12 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:38:12 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:39:13 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:40:13 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:41:14 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:42:14 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:43:15 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:44:15 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:45:16 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:46:16 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:47:17 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:48:17 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:49:17 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:50:18 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:51:18 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:52:19 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:53:19 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:54:20 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:55:20 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:56:21 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:57:21 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:58:22 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 12:59:22 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:00:22 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:01:23 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:02:23 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:03:24 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:04:25 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:05:25 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:06:26 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:07:26 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:08:27 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:09:28 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:10:28 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:11:29 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:12:29 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:13:30 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:14:30 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:15:31 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:16:31 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:17:31 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:18:32 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:19:32 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:20:33 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:21:33 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:22:34 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:23:34 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:24:35 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:25:35 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:26:36 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:27:36 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:28:37 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:29:37 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:30:38 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:31:38 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:32:39 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:33:39 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:34:40 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:35:40 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:36:40 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:37:41 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:38:41 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:39:42 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:40:42 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:41:43 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:42:43 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:43:44 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:44:44 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:45:45 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:46:45 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:47:46 [emerg] 1#1: unknown "logdate" variable
+2021/03/24 13:48:45 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8
+2021/03/24 13:48:46 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8
+2021/03/24 13:48:47 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8
+2021/03/24 13:48:48 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8
+2021/03/24 13:48:50 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8
+2021/03/24 13:48:52 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8
+2021/03/24 13:48:56 [emerg] 1#1: "map" directive is not allowed here in /etc/nginx/conf.d/se_a.conf:8

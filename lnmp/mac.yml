@@ -25,53 +25,19 @@ services:
             mynetwork:
                 ipv4_address: 172.20.0.2
 
-    redisW_master:
+    redisW:
         #build: ./redis
         image: worden/redis
-        container_name: lx_redis_master
+        container_name: lx_redis
         ports:
             - "6379:6379"
-        volumes:
-            - ~/Code/dockerEnv/lnmp/redis/redis_master.conf:/usr/local/etc/redis/redis_master.conf
-            - ~/Code/dockerEnv/lnmp/redis/data/redis_master:/data
         restart: always
         environment:
             TZ: "Asia/Shanghai"
         networks:
             mynetwork:
-                ipv4_address: 172.20.0.10
-    redisW_slave1:
-        #build: ./redis
-        image: worden/redis
-        container_name: lx_redis_slave1
-        ports:
-            - "6380:6380"
-        volumes:
-            - ~/Code/dockerEnv/lnmp/redis/redis_slave1.conf:/usr/local/etc/redis/redis_slave1.conf
-            - ~/Code/dockerEnv/lnmp/redis/data/redis_slave1.conf:/data
-        restart: always
-        environment:
-            TZ: "Asia/Shanghai"
-        networks:
-            mynetwork:
-                ipv4_address: 172.20.0.11
-    redisW_slave2:
-        #build: ./redis
-        image: worden/redis
-        container_name: lx_redis_slave2
-        ports:
-            - "6381:6381"
-        volumes:
-            - ~/Code/dockerEnv/lnmp/redis/redis_slave2.conf:/usr/local/etc/redis/redis_slave2.conf
-            - ~/Code/dockerEnv/lnmp/redis/data/redis_slave2.conf:/data
-        restart: always
-        environment:
-            TZ: "Asia/Shanghai"
-        networks:
-            mynetwork:
-                ipv4_address: 172.20.0.12
-
-
+                ipv4_address: 172.20.0.3
+    
     phpW:
         #build: ./php
         image: worden/php
@@ -80,9 +46,7 @@ services:
             - "9000:9000"
         links:
             - "mysqlW"
-            - "redisW_master"
-            - "redisW_slave1"
-            - "redisW_slave2"
+            - "redisW"
         volumes:
             - ~/Code/worden:/worden
             - ~/Code/lx:/lx
@@ -108,7 +72,11 @@ services:
         volumes:
             - ~/Code/dockerEnv/lnmp/nginx/logs:/var/log/nginx
             - ~/Code/smart_edu:/smart_edu
+            - ~/Code/dockerEnv/lnmp/nginx/conf/se_a.conf:/etc/nginx/conf.d/se_a.conf
+            - ~/Code/dockerEnv/lnmp/nginx/conf/se_b.conf:/etc/nginx/conf.d/se_b.conf
         restart: always
+        environment:
+            TZ: "Asia/Shanghai"
         networks:
             mynetwork:
                 ipv4_address: 172.20.0.6

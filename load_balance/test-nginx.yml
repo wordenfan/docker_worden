@@ -1,0 +1,217 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
+
+version: '2'
+services:
+    mysqlW:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/mysql/data:/var/lib/mysql
+            - ~/Code/worden:/worden
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: worden_test_load
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
+
+    redisW:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis
+        ports:
+            - "6379:6379"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/redis/conf/redis_master.conf:/etc/redis/redis_master.conf
+            - ~/Code/dockerEnv/load_balance/redis/data/master_data:/data/redis/master
+        restart: always
+        command: redis-server /etc/redis/redis_master.conf
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.3
+
+    redisW_slave1:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis_slave1
+        ports:
+            - "6311:6311"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/redis/conf/redis_slave1.conf:/etc/redis/redis_slave1.conf
+            - ~/Code/dockerEnv/load_balance/redis/data/slave1_data:/data/redis/slave1
+        restart: always
+        command: redis-server /etc/redis/redis_slave1.conf
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.11
+    
+    redisW_slave2:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis_slave2
+        ports:
+            - "6312:6312"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/redis/conf/redis_slave2.conf:/etc/redis/redis_slave2.conf
+            - ~/Code/dockerEnv/load_balance/redis/data/slave2_data:/data/redis/slave2
+        restart: always
+        command: redis-server /etc/redis/redis_slave2.conf
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.12
+
+    redisSentinel:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis_sentinel
+        ports:
+            - "26379:26379"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/redis/conf/master_sentinel.conf:/etc/redis/master_sentinel.conf
+            - ~/Code/dockerEnv/load_balance/redis/data/sentinel:/data/redis/sentinel
+        command: redis-sentinel /etc/redis/master_sentinel.conf
+        links:
+            - "redisW"
+            - "redisW_slave1"
+            - "redisW_slave2"
+        environment:
+            SENTINEL_DOWN_AFTER: "5000"
+            SENTINEL_FAILOVER: "5000"
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.13
+
+    phpW:
+        #build: ./php
+        image: worden/php
+        container_name: lx_php
+        # ports:
+        #     - "9000:9000"
+        links:
+            - "mysqlW"
+            - "redisW"
+            - "redisW_slave1"
+            - "redisW_slave2"
+        volumes:
+            - ~/Code/worden:/worden
+            - ~/Code/lx:/lx
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.5
+    phpW_2:
+        #build: ./php
+        image: worden/php
+        container_name: lx_php2
+        # ports:
+        #     - "9000:9000"
+        links:
+            - "mysqlW"
+            - "redisW"
+            - "redisW_slave1"
+            - "redisW_slave2"
+        volumes:
+            - ~/Code/worden:/worden
+            - ~/Code/lx:/lx
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.6
+
+    nginxW_1:
+        #build: ./nginx
+        image: worden/nginx
+        container_name: lx_nginx7
+        ports:
+            # - "80:80"
+            - "8080:8087"
+        links:
+            - "phpW"
+        volumes_from:
+            - "phpW"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/nginx/logs:/var/log/nginx
+            - ~/Code/dockerEnv/load_balance/nginx/conf/se_aa.conf:/etc/nginx/conf.d/se_aa.conf
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.7
+    nginxW_2:
+        #build: ./nginx
+        image: worden/nginx
+        container_name: lx_nginx8
+        ports:
+            # - "80:80"
+            - "8083:8088"
+        links:
+            - "phpW_2"
+        volumes_from:
+            - "phpW_2"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/nginx/logs:/var/log/nginx
+            - ~/Code/dockerEnv/load_balance/nginx/conf/se_bb.conf:/etc/nginx/conf.d/se_bb.conf
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.8
+    nginxW-Load-balance:
+        #build: ./nginx
+        image: worden/nginx
+        container_name: lx_nginx_balance
+        ports:
+            - "80:80"
+            # - "8080:8080"
+            # - "8083:8083"
+        links:
+            - "nginxW_1"
+            - "nginxW_2"
+        volumes_from:
+            - "phpW"
+        volumes:
+            - ~/Code/dockerEnv/load_balance/nginx/logs:/var/log/nginx
+            - ~/Code/dockerEnv/load_balance/nginx/conf/load_balance.conf:/etc/nginx/conf.d/load_balance.conf
+            - ~/Code/smart_edu:/smart_edu
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.10
+
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1
