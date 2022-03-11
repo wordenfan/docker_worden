@@ -1,0 +1,199 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
+# http://127.0.0.1:5601/ kibana地址
+# http://127.0.0.1:9100/ head地址
+
+version: '2'
+services:
+    mysqlW:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/bigdata/mysql/data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: sugon_local_test
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
+
+    redisW:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis
+        ports:
+            - "6379:6379"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.3
+    
+    # elasticsearchW_single: #与下发集群二选一
+    #     image: worden/elasticsearch
+    #     container_name: lx_es_single
+    #     volumes:
+    #         - ~/Code/dockerEnv/bigdata/elasticsearch/es_single_data:/usr/share/elasticsearch/data
+    #     environment:
+    #         - bootstrap.memory_lock=true
+    #         - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+    #         - discovery.type=single-node
+    #     ports:
+    #         - "9200:9200" # http端口，可以直接浏览器访问
+    #         - "9300:9300" # es集群间端口tcp通信
+    #     networks:
+    #         mynetwork:
+    #             ipv4_address: 172.20.0.4
+    
+    elasticsearchW_4:
+        image: worden/elasticsearch
+        container_name: lx_es4
+        volumes:
+            - ~/Code/dockerEnv/bigdata/elasticsearch/es4_data:/usr/share/elasticsearch/data
+            - ~/Code/dockerEnv/bigdata/elasticsearch/es_config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        environment:
+            - node.name=node-4                 # 节点名称，集群模式下每个节点名称唯一
+            - network.publish_host=172.20.0.4  # 用于集群内各机器间通信,对外使用，其他机器访问本机器的es服务，一般为本机宿主机IP
+            - network.host=0.0.0.0             # 设置绑定的ip地址，默认为0.0.0.0，即本机
+            - discovery.seed_hosts=172.20.0.4,172.20.0.5,172.20.0.6          # es7.0之后新增的写法，写入候选主节点的设备地址，在开启服务后，如果master挂了，哪些可以被投票选为主节点
+            - cluster.initial_master_nodes=172.20.0.4,172.20.0.5,172.20.0.6  # es7.0之后新增的配置，初始化一个新的集群时需要此配置来选举master
+            - cluster.name=sugon-es      # 集群名称，相同名称为一个集群， 三个es节点须一致
+            - bootstrap.memory_lock=true # 内存交换的选项，官网建议为true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置内存，如内存不足，可以尝试调低点
+            - http.cors.enabled=true    # 是否支持跨域 // 这里设置不起作用，但是可以将此文件映射到宿主机进行修改，然后重启，解决跨域
+            - http.cors.allow-origin="*" # 支持的域名 // 这里设置不起作用，但是可以将此文件映射到宿主机进行修改，然后重启，解决跨域
+        ulimits: # 栈内存的上限
+            memlock:
+                soft: -1    # 不限制
+                hard: -1    # 不限制 
+        ports:
+            - "9204:9200" # http端口，可以直接浏览器访问
+            - "9304:9300" # es集群间端口tcp通信
+        restart: always
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.4
+
+    elasticsearchW_5:
+        image: worden/elasticsearch
+        container_name: lx_es5
+        volumes:
+            - ~/Code/dockerEnv/bigdata/elasticsearch/es5_data:/usr/share/elasticsearch/data
+            - ~/Code/dockerEnv/bigdata/elasticsearch/es_config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        environment:
+            - node.name=node-5                 # 节点名称，集群模式下每个节点名称唯一
+            - network.publish_host=172.20.0.5  # 用于集群内各机器间通信,对外使用，其他机器访问本机器的es服务，一般为本机宿主机IP
+            - network.host=0.0.0.0             # 设置绑定的ip地址，默认为0.0.0.0，即本机
+            - discovery.seed_hosts=172.20.0.4,172.20.0.5,172.20.0.6          # es7.0之后新增的写法，写入候选主节点的设备地址，在开启服务后，如果master挂了，哪些可以被投票选为主节点
+            - cluster.initial_master_nodes=172.20.0.4,172.20.0.5,172.20.0.6  # es7.0之后新增的配置，初始化一个新的集群时需要此配置来选举master
+            - cluster.name=sugon-es      # 集群名称，相同名称为一个集群， 三个es节点须一致
+            - bootstrap.memory_lock=true # 内存交换的选项，官网建议为true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置内存，如内存不足，可以尝试调低点
+            - http.cors.enabled=true    # 是否支持跨域 // 这里设置不起作用，但是可以将此文件映射到宿主机进行修改，然后重启，解决跨域
+            - http.cors.allow-origin="*" # 支持的域名 // 这里设置不起作用，但是可以将此文件映射到宿主机进行修改，然后重启，解决跨域
+        ulimits: # 栈内存的上限
+            memlock:
+                soft: -1    # 不限制
+                hard: -1    # 不限制 
+        ports:
+            - "9205:9200" # http端口，可以直接浏览器访问
+            - "9305:9300" # es集群间端口tcp通信
+        restart: always
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.5
+
+    elasticsearchW_6:
+        image: worden/elasticsearch
+        container_name: lx_es6
+        volumes:
+            - ~/Code/dockerEnv/bigdata/elasticsearch/es6_data:/usr/share/elasticsearch/data
+            - ~/Code/dockerEnv/bigdata/elasticsearch/es_config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+        environment:
+            - node.name=node-6                 # 节点名称，集群模式下每个节点名称唯一
+            - network.publish_host=172.20.0.6  # 用于集群内各机器间通信,对外使用，其他机器访问本机器的es服务，一般为本机宿主机IP
+            - network.host=0.0.0.0             # 设置绑定的ip地址，默认为0.0.0.0，即本机
+            - discovery.seed_hosts=172.20.0.4,172.20.0.5,172.20.0.6          # es7.0之后新增的写法，写入候选主节点的设备地址，在开启服务后，如果master挂了，哪些可以被投票选为主节点
+            - cluster.initial_master_nodes=172.20.0.4,172.20.0.5,172.20.0.6  # es7.0之后新增的配置，初始化一个新的集群时需要此配置来选举master
+            - cluster.name=sugon-es      # 集群名称，相同名称为一个集群， 三个es节点须一致
+            - bootstrap.memory_lock=true # 内存交换的选项，官网建议为true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m" #设置内存，如内存不足，可以尝试调低点
+            - http.cors.enabled=true    # 是否支持跨域 // 这里设置不起作用，但是可以将此文件映射到宿主机进行修改，然后重启，解决跨域
+            - http.cors.allow-origin="*" # 支持的域名 // 这里设置不起作用，但是可以将此文件映射到宿主机进行修改，然后重启，解决跨域
+        ulimits: # 栈内存的上限
+            memlock:
+                soft: -1    # 不限制
+                hard: -1    # 不限制 
+        ports:
+            - "9206:9200" # http端口，可以直接浏览器访问
+            - "9306:9300" # es集群间端口tcp通信
+        restart: always
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.6
+
+    golangW:
+        build: ./golang
+        image: worden/golang
+        container_name: lx_golang
+        links:
+            - "mysqlW"
+            - "redisW"
+            # - "elasticsearchW_single"
+            - "elasticsearchW_4"
+            - "elasticsearchW_5"
+            - "elasticsearchW_6"
+        volumes:
+            - ~/Code/golang:/worden/golang
+        stdin_open: true
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.7
+
+    EsKibana:
+        image: kibana:7.6.0
+        container_name: lx_kibana
+        links:
+          - "elasticsearchW_4"
+          - "elasticsearchW_5"
+          - "elasticsearchW_6"
+        ports:
+          - "5601:5601"
+        volumes:
+          - ~/Code/dockerEnv/bigdata/elasticsearch/es_config/kibana.yml:/usr/share/kibana/config/kibana.yml
+        environment:
+          ELASTICSEARCH_HOSTS: http://172.20.0.4:9200 #同yml配置文件
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.8
+
+    EsHead:
+        image: docker.io/tobias74/elasticsearch-head
+        container_name: lx_esHead
+        links:
+          - "elasticsearchW_4"
+          - "elasticsearchW_5"
+          - "elasticsearchW_6"
+        ports:
+          - 9100:9100
+        environment:
+          ELASTICSEARCH_HOSTS: http://127.0.0.1:9204
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.9
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1

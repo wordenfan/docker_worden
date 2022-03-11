@@ -1,0 +1,88 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
+# http://127.0.0.1:5601/ kibana地址
+# http://127.0.0.1:9100/ head地址
+# cd opt/kafka/bin/
+# 创建主题 ./kafka-topics.sh --create --zookeeper 172.20.0.10:2181 --replication-factor 1  --partitions 1 --topic test_wd
+# 创建生产者 ./kafka-console-producer.sh --broker-list 172.20.0.11:9092 --topic test_wd
+# 创建消费者 ./kafka-console-consumer.sh --bootstrap-server 172.20.0.11:9092 --topic test_wd --from-beginning
+version: '2'
+services:
+    mysqlW:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/bigdata/mysql/data:/var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: sugon_local_test
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
+
+    redisW:
+        #build: ./redis
+        image: worden/redis
+        container_name: lx_redis
+        ports:
+            - "6379:6379"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.3
+                    
+    zookeeperW:
+        image: wurstmeister/zookeeper
+        container_name: lx_zookeeper
+        ports:
+            - "2181:2181"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.10
+
+    kafkaW:
+        image: wurstmeister/kafka
+        depends_on: [ zookeeperW ]
+        container_name: lx_kafka
+        ports:
+            - "9092:9092"
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: 172.20.0.11
+            KAFKA_CREATE_TOPICS: "test:1:1"
+            KAFKA_ZOOKEEPER_CONNECT: lx_zookeeper:2181
+        volumes:
+            - ~/Code/dockerEnv/bigdata/kafka:/worden/kafka
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.11
+
+      javaW:
+        image: worden/java
+        container_name: lx_java
+        ports:
+            - "8080:8080"
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: 172.20.0.11
+            KAFKA_CREATE_TOPICS: "test:1:1"
+            KAFKA_ZOOKEEPER_CONNECT: lx_zookeeper:2181
+        volumes:
+            - ~/Code/java:/java
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.12
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1

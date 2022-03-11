@@ -1,0 +1,127 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
+
+version: '2'
+services:
+    mysqlW_m1:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_m1"
+        privileged: true
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/data/cluster_m1:/var/lib/mysql
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_master_1.cnf:/etc/mysql/conf.d/my_master_1.cnf
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/keepalived/keepalived-master.conf:/etc/keepalived/keepalived.conf
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_DATABASE: cluster_m1
+          MYSQL_USER: worden
+          MYSQL_PASSWORD: 123456
+          TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
+
+    mysqlW_m2:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_m2"
+        privileged: true
+        ports:
+            - "3307:3306"
+        volumes:
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/data/cluster_m2:/var/lib/mysql
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_master_2.cnf:/etc/mysql/conf.d/my_master_2.cnf
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/keepalived/keepalived-backup.conf:/etc/keepalived/keepalived.conf
+        restart: always
+        environment:
+          MYSQL_ROOT_PASSWORD: 123456
+          MYSQL_DATABASE: cluster_m1
+          MYSQL_USER: worden
+          MYSQL_PASSWORD: 123456
+          TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.12
+
+    atlasW_a1:
+        #build: ./nginx
+        image: worden/atlas
+        container_name: lx_atlas_a1
+        ports:
+            - "1234:1234"
+            - "2345:2345"
+        links:
+            - "mysqlW_m1"
+            - "mysqlW_m2"
+        volumes:
+            - ~/Code/:/worden/Code
+            - ~/Code/dockerEnv/mysql_atlas_ha/atlas/atlas/test.cnf:/usr/local/mysql-proxy/conf/test.cnf	
+        tty: true
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.5
+    
+    mysqlW_s1:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_s1"
+        ports:
+            - "33061:3306"
+        volumes:
+            - ~/Code/worden:/worden
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_slave_1.cnf:/etc/mysql/conf.d/slave1.cnf
+        restart: always
+        links:
+            - "mysqlW_m1"
+            - "mysqlW_m2"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: cluster_m1
+            MYSQL_USER: worden
+            MYSQL_PASSWORD: 123456
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.6
+
+    mysqlW_s2:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_s2"
+        ports:
+            - "33062:3306"
+        volumes:
+            - ~/Code/worden:/worden
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_slave_2.cnf:/etc/mysql/conf.d/slave2.cnf
+        restart: always
+        links:
+            - "mysqlW_m1"
+            - "mysqlW_m2"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: cluster_m1
+            MYSQL_USER: worden
+            MYSQL_PASSWORD: 123456
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.16
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/26
+                  gateway: 172.20.0.1

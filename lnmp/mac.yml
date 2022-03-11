@@ -3,6 +3,8 @@
 #       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
 # expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
 # 参考 http://debugo.com/docker-compose/
+# docker-compose -f mac.yml stop phpW
+# docker-compose -f mac.yml restart phpW
 
 version: '2'
 services:
@@ -44,6 +46,7 @@ services:
         container_name: lx_php
         ports:
             - "9000:9000"
+            - "8002:8002"
         links:
             - "mysqlW"
             - "redisW"
@@ -62,7 +65,6 @@ services:
         container_name: lx_nginx
         ports:
             - "80:80"
-            - "8080:8080"
             - "8083:8083"
             - "7890:7890"
         links:
@@ -72,17 +74,89 @@ services:
         volumes:
             - ~/Code/dockerEnv/lnmp/nginx/logs:/var/log/nginx
             - ~/Code/smart_edu:/smart_edu
-            - ~/Code/dockerEnv/lnmp/nginx/conf/se_a.conf:/etc/nginx/conf.d/se_a.conf
+            - ~/Code/dockerEnv/lnmp/nginx/conf/vc.conf:/etc/nginx/conf.d/vc.conf
             - ~/Code/dockerEnv/lnmp/nginx/conf/se_b.conf:/etc/nginx/conf.d/se_b.conf
+            - ~/Code/dockerEnv/lnmp/nginx/conf/ph.conf:/etc/nginx/conf.d/ph.conf
+            - ~/Code/dockerEnv/lnmp/nginx/conf/grpc.conf:/etc/nginx/conf.d/grpc.conf
         restart: always
+        command: /bin/bash -c "nginx -g 'daemon off;'"
         environment:
             TZ: "Asia/Shanghai"
         networks:
             mynetwork:
                 ipv4_address: 172.20.0.6
 
+    nsq-nsqlookupd:
+        image: nsqio/nsq:v1.2.0
+        container_name: lx_nsq_nsqlookupd
+        command: /nsqlookupd -http-address 0.0.0.0:4161 -tcp-address 0.0.0.0:4160 -broadcast-address nsq-nsqlookupd
+        ports:
+          - "4160:4160" #tcp
+          - "4161:4161" #http
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.11
 
+    nsq-nsqd:
+        image: nsqio/nsq:v1.2.0
+        container_name: lx_nsq_nsqd
+        hostname: nsq-nsqd
+        command: /nsqd -tcp-address 0.0.0.0:4150 -data-path /usr/local/nsq/bin/data --http-address 0.0.0.0:4151 -lookupd-tcp-address nsq-nsqlookupd:4160 -broadcast-address nsq-nsqd
+        volumes:
+          - ~/Code/dockerEnv/lnmp/nsq/data:/usr/local/nsq/bin/data
+        ports:
+          - "4150:4150" #tcp
+          - "4151:4151" #http
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.12
+
+    nsq-admin:
+        image: nsqio/nsq:v1.2.0
+        container_name: lx_nsq_admin
+        command: /nsqadmin -lookupd-http-address nsq-nsqlookupd:4161
+        ports:
+          - "4171:4171"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.13
+    golangW:
+        #build: ./golang
+        image: worden/golang
+        container_name: lx_golang
+        ports:
+          - "3390:3390"   #peehoo
+          - "8080:8080"   #skywalking_ui
+          - "11800:11800" #skywalking_grpc
+          - "12800:12800" #skywalking_http
+          - "5775:5775"   #jaejer_udp
+          - "6831:6831"   #jaejer_udp
+          - "6832:6832"   #jaejer_udp
+          - "5778:5778"   #jaejer_http
+          - "16686:16686" #jaejer_http_ui
+          - "14268:14268" #jaejer_http
+          - "14250:14250" #jaejer_http
+          - "9411:9411"   #jaejer_http
+          - "10080:10080"   #jaejer_demo_main
+          - "10081:10081"   #jaejer_demo_service1
+          - "10082:10082"   #jaejer_demo_service2
+          - "8081:8081"   #jaejer_demo_service2
+        links:
+            - "mysqlW"
+            - "redisW"
+        volumes:
+            - ~/Code/golang:/worden/golang
+        environment:
+          TZ: "Asia/Shanghai"
+        stdin_open: true
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.14
 #networks 要与上分的service目录同级别,下方缩进不能有错误
+
+# 
+
 networks:
     mynetwork:
         ipam:

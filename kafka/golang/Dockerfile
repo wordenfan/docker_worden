@@ -1,0 +1,27 @@
+# docker build -t worden/golang ./golang
+# docker run -d --name=src_golangW_1 --link src_mysqlW_1:src_mysqlW_1 --link src_redisW_1:src_redisW_1 -v ~/Code/worden:/worden -it worden/golang
+
+FROM golang:1.16.0
+
+RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak
+# 阿里云镜像有bug慎用( libfreetype6-dev )
+# RUN echo "" > /etc/apt/sources.list
+# RUN echo "deb http://mirrors.aliyun.com/debian jessie main" >> /etc/apt/sources.list
+# RUN echo "deb http://mirrors.aliyun.com/debian jessie-updates main" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.ustc.edu.cn/debian stable main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb-src http://mirrors.ustc.edu.cn/debian stable main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://mirrors.ustc.edu.cn/debian stable-proposed-updates main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb-src http://mirrors.ustc.edu.cn/debian stable-proposed-updates main contrib non-free" >> /etc/apt/sources.list
+
+RUN apt-get update && apt-get install -y vim
+
+# VOLUME ["/usr/local"]
+
+ENV GO111MODULE=on
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GOPATH /worden/golang
+ENV GOBIN /worden/golang/bin
+ENV PATH $PATH:$GOPATH/bin
+
+
+WORKDIR /worden/golang/src

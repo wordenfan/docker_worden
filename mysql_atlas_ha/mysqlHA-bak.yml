@@ -1,0 +1,143 @@
+# yml语法备忘
+# ports: 导出端口。格式可以是：
+#       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
+# expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
+# 参考 http://debugo.com/docker-compose/
+
+version: '2'
+services:
+    mysqlW_m1:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_m1"
+        ports:
+            - "3306:3306"
+        volumes:
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/data/cluster_m1:/var/lib/mysql
+            - ~/Code/worden:/worden
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_master_1.cnf:/etc/mysql/conf.d/my_master_1.cnf
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: cluster_m1
+            MYSQL_USER: worden
+            MYSQL_PASSWORD: 123456
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.2
+    
+    mysqlW_m2:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_m2"
+        ports:
+            - "3307:3306"
+        volumes:
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/data/cluster_m2:/var/lib/mysql
+            - ~/Code/worden:/worden
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_master_2.cnf:/etc/mysql/conf.d/my_master_2.cnf
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: cluster_m2
+            MYSQL_USER: worden
+            MYSQL_PASSWORD: 123456
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.12
+
+    mysqlW_s1:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_s1"
+        ports:
+            - "33061:3306"
+        volumes:
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/data/cluster_s1:/var/lib/mysql
+            - ~/Code/worden:/worden
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_slave.cnf:/etc/mysql/conf.d/my_slave.cnf
+        restart: always
+        links:
+            - "mysqlW_m1"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: cluster_m1
+            MYSQL_USER: worden
+            MYSQL_PASSWORD: 123456
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.3
+
+    mysqlW_s2:
+        #build: ./mysql
+        image: worden/mysql
+        container_name: "lx_mysql_s2"
+        ports:
+            - "33062:3306"
+        volumes:
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/data/cluster_s2:/var/lib/mysql
+            - ~/Code/worden:/worden
+            - ~/Code/dockerEnv/mysql_atlas_ha/mysql/conf/my_slave.cnf:/etc/mysql/conf.d/my_slave.cnf
+        restart: always
+        links:
+            - "mysqlW_m2"
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_DATABASE: cluster_m2
+            MYSQL_USER: worden
+            MYSQL_PASSWORD: 123456
+            TZ: "Asia/Shanghai"
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.13
+    
+    atlasW_m1:
+        #build: ./nginx
+        image: worden/atlas
+        container_name: lx_atlas_m1
+        ports:
+            - "82:82"
+        links:
+            - "mysqlW_m1"
+            - "mysqlW_m2"
+        volumes:
+            - ~/Code/:/worden/Code
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.5
+
+    atlasW_m2:
+        #build: ./nginx
+        image: worden/atlas
+        container_name: lx_atlas_m2
+        ports:
+            - "83:83"
+        links:
+            - "mysqlW_m1"
+            - "mysqlW_m2"
+        volumes:
+            - ~/Code/:/worden/Code
+        restart: always
+        environment:
+            TZ: "Asia/Shanghai"
+        tty: true
+        networks:
+            mynetwork:
+                ipv4_address: 172.20.0.15
+
+    
+
+#networks 要与上分的service目录同级别,下方缩进不能有错误
+networks:
+    mynetwork:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+                  gateway: 172.20.0.1

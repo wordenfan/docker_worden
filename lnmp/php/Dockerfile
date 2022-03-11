@@ -1,7 +1,7 @@
 # docker build -t worden/php ./php
 # docker run -d --name=phpW -p 9000:9000 -p 50051:50051 --link mysqlW:mysqlW --link redisW:redisW --link mongoW:mongoW -v ~/Code/worden:/worden -v ~/Code/sipai:/sipai -it worden/php
 
-FROM php:7.2.10-fpm
+FROM php:7.3.0-fpm
 
 # 可用1：FROM php:7.1-fpm
 # 可用2：FROM php:7.2-fpm
@@ -42,12 +42,27 @@ RUN apt-get install zip unzip
 #===Ping命令===
 RUN apt-get install -yqq inetutils-ping
 
+RUN docker-php-ext-install bcmath
+RUN docker-php-ext-install sockets
 RUN docker-php-ext-install opcache
-RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install mysqli
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-install zip
 
+#===grpc和protobuf扩展、protoc编译工具===
+RUN pecl install protobuf
+RUN docker-php-ext-enable protobuf
+RUN pecl install grpc v1.36.0
+RUN docker-php-ext-enable grpc
+COPY ./ext_software/protoc-3.14.0-linux-x86_64.zip /worden_software/protoc-3.14.0-linux-x86_64.zip
+COPY ./ext_software/grpc_php_plugin /usr/local/bin
+WORKDIR /worden_software
+RUN unzip protoc-3.14.0-linux-x86_64.zip \
+&& (  \
+    mv ./bin/protoc /usr/local/bin \
+    && cp -r ./include/google /usr/local/include \
+    && chmod +x /usr/local/bin/grpc_php_plugin \
+)
 
 #===redis扩展===
 # COPY而不是ADD，这是由于ADD指令会 自动解压tar文件
@@ -90,13 +105,16 @@ RUN tar -xf ./mongodb-1.5.3.tgz \
 && docker-php-ext-enable mongodb
 
 #===composer===
+# RUN curl -sS https://getcomposer.org/installer | php
+# RUN sudo mv composer.phar /usr/local/bin/composer
 ADD ./ext_software/composer.phar /usr/local/bin/composer
 RUN chmod 755 /usr/local/bin/composer
-RUN composer self-update
 RUN composer config -g --unset repos.packagist
 RUN composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/
 
+# RUN composer self-update
+
 ENV TIME_ZONE Asiz/Shanghai
 
-WORKDIR /worden
+WORKDIR /smart_edu
 VOLUME ["/worden"]

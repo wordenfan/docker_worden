@@ -3,6 +3,8 @@
 #       ports:-"3000"-"8000:8000"-"127.0.0.1:8001:8001"
 # expose：导出端口，但不映射到宿主机的端口上。它仅对links的容器开放。格式直接指定端口号即可。
 # 参考 http://debugo.com/docker-compose/
+# adminUi：http://127.0.0.1:4171/
+# Push消息：http://127.0.0.1:4151/pub?topic=SugonA1
 
 version: '2'
 services:
